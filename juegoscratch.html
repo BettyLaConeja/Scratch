@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Juego sobre Scratch - Octavo Grado</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f7d98c;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  #game-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+  h1 {
+    text-align: center;
+    color: #e67e22;
+  }
+  .question {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+  }
+  .option {
+    background: #f2f2f2;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+  }
+  .option:hover {
+    background: #e0e0e0;
+  }
+  #result {
+    text-align: center;
+    font-size: 1.3em;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  #next-btn {
+    display: none;
+    background: #e67e22;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 15px;
+  }
+  #next-btn:hover {
+    background: #cf6d18;
+  }
+</style>
+</head>
+<body>
+<div id="game-container">
+  <h1>Juego: ¿Cuánto sabes de Scratch?</h1>
+  <div id="question-container"></div>
+  <div id="result"></div>
+  <button id="next-btn">Siguiente</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "¿Qué es Scratch?",
+    options: [
+      "Un lenguaje de programación visual por bloques",
+      "Un videojuego popular",
+      "Un navegador web",
+      "Un tipo de robot"
+    ],
+    answer: 0
+  },
+  {
+    q: "¿Qué se usa para programar en Scratch?",
+    options: [
+      "Bloques que encajan como rompecabezas",
+      "Líneas de código en texto",
+      "Comandos por voz",
+      "Tarjetas físicas"
+    ],
+    answer: 0
+  },
+  {
+    q: "¿Cómo se llaman los personajes en Scratch?",
+    options: ["Sprites", "Bots", "Nodos", "Agentes"],
+    answer: 0
+  },
+  {
+    q: "¿Qué es un escenario en Scratch?",
+    options: [
+      "El fondo donde ocurre la acción",
+      "Un tipo de sprite",
+      "Una herramienta para sonidos",
+      "Un bloque especial"
+    ],
+    answer: 0
+  },
+  {
+    q: "¿Qué categoría de bloques controla el movimiento?",
+    options: ["Movimiento", "Eventos", "Sonido", "Sensores"],
+    answer: 0
+  }
+];
+
+let currentQuestion = 0;
+let allowAnswer = true;
+
+function loadQuestion() {
+  allowAnswer = true;
+  document.getElementById("result").textContent = "";
+  const container = document.getElementById("question-container");
+  container.innerHTML = "";
+
+  const q = questions[currentQuestion];
+  const questionElem = document.createElement("div");
+  questionElem.className = "question";
+  questionElem.textContent = q.q;
+  container.appendChild(questionElem);
+
+  q.options.forEach((opt, index) => {
+    const optElem = document.createElement("div");
+    optElem.className = "option";
+    optElem.textContent = opt;
+    optElem.onclick = () => selectOption(index);
+    container.appendChild(optElem);
+  });
+}
+
+function selectOption(index) {
+  if (!allowAnswer) return;
+  allowAnswer = false;
+
+  const q = questions[currentQuestion];
+  const result = document.getElementById("result");
+
+  if (index === q.answer) {
+    result.textContent = "¡Correcto!";
+    result.style.color = "green";
+  } else {
+    result.textContent = "Incorrecto";
+    result.style.color = "red";
+  }
+
+  document.getElementById("next-btn").style.display = "block";
+}
+
+// Botón siguiente
+
+document.getElementById("next-btn").onclick = () => {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    document.getElementById("question-container").innerHTML = "<h2>¡Has terminado el juego!</h2>";
+    document.getElementById("next-btn").style.display = "none";
+    return;
+  }
+  document.getElementById("next-btn").style.display = "none";
+  loadQuestion();
+};
+
+// Iniciar
+loadQuestion();
+</script>
+</body>
+</html>
